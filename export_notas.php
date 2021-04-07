@@ -45,13 +45,29 @@ $fieldsList = explode(
 		"motivo-status;" .
 		"nItem;" .
 		"cProd;" .
+		"cEAN;" .
 		"xProd;" .
 		"ncm;" .
 		"nve;" .
 		"cest;" .
+		"indEscala;" .
+		"CNPJFab;" .
+		"cBenef;" .
 		"extipi;" .
 		"cfop;" .
+		"uCom;" .
+		"qCom;" .
+		"vUnCom;" .
 		"vProd;" .
+		"cEANTrib;" .
+		"uTrib;" .
+		"qTrib;" .
+		"vUnTrib;" .
+		"vFrete;" .
+		"vSeg;" .
+		"vDesc;" .
+		"vOutro;" .
+		"indTot;" .
 		"icms-elem;icms-origem;icms-CST;icms-modBC;icms-vBC;icms-pRedBC;icms-pICMS;icms-vICMS;icms-vBCFCP;icms-pFCP;icms-vFCP;icms-modBCST;icms-pMVAST;icms-pRedBCST;icms-vBCST;icms-pICMSST;icms-vICMSST;icms-vBCFCPST;icms-pFCPST;icms-vFCPST;icms-vICMSDeson;icms-motDesICMS;icms-vICMSOp;icms-pDif;icms-vICMSDif;icms-pBCOp;icms-UFST;icms-vBCSTRet;icms-pST;icms-vICMSSubstituto;icms-vICMSSTRet;icms-vBCFCPSTRet;icms-pFCPSTRet;icms-vFCPSTRet;icms-vBCSTDest;icms-vICMSSTDest;icms-pRedBCEfet;icms-vBCEfet;icms-pICMSEfet;icms-vICMSEfet;" .
 		"ipi-elem;ipi-CST;ipi-vBC;ipi-pIPI;ipi-qUnid;ipi-vUnid;ipi-vIPI;" .
 		"pis-elem;pis-CST;pis-vBC;pis-pPIS;pis-qBCProd;pis-vAliqProd;pis-vPIS;" .
@@ -701,13 +717,29 @@ function processXml(&$xml, &$file, &$printer)
 			textField($xml->protNFe->infProt->xMotivo) .
 			numField($item['nItem']) . // Número do Item
 			textField($prod->cProd) . // Código do produto ou serviço. Preencher com CFOP caso se trate de itens não relacionados com mercadorias/produto e que o contribuinte não possua codificação própria Formato ”CFOP9999”
+			textField($prod->cEAN) . // GTIN (Global Trade Item Number) do produto, antigo código EAN ou código de barras
 			textField($prod->xProd) . // Descrição do produto ou serviço
 			textField($prod->NCM) . // Código NCM (8 posições), será permitida a informação do gênero (posição do capítulo do NCM) quando a operação não for de comércio exterior (importação/exportação) ou o produto não seja tributado pelo IPI. Em caso de item de serviço ou item que não tenham produto (Ex. transferência de crédito, crédito do ativo imobilizado, etc.), informar o código 00 (zeros) (v2.0)
 			textField($prod->NVE) . // Nomenclatura de Valor aduaneio e Estatístico
 			textField($prod->CEST) . // Codigo especificador da Substuicao Tributaria - CEST, que identifica a mercadoria sujeita aos regimes de substituicao tributária e de antecipação do recolhimento do imposto
+			textField($prod->indEscala) . // S ou N
+			textField($prod->CNPJFab) . // CNPJ do Fabricante da Mercadoria, obrigatório para produto em escala NÃO relevante.
+			textField($prod->cBenef) . // ??? <xs:pattern value="([!-ÿ]{8}|[!-ÿ]{10}|SEM CBENEF)?"/>
 			textField($prod->EXTIPI) . // Código EX TIPI (3 posições)
 			textField($prod->CFOP) . // Cfop
+			textField($prod->uCom) . // Unidade comercial
+			numField($prod->qCom) . // Quantidade Comercial do produto, alterado para aceitar de 0 a 4 casas decimais e 11 inteiros.
+			numField($prod->vUnCom) . // Valor unitário de comercialização - alterado para aceitar 0 a 10 casas decimais e 11 inteiros
 			textField($prod->vProd) .	// Valor bruto do produto ou serviço.
+			textField($prod->cEANTrib) . // GTIN (Global Trade Item Number) da unidade tributável, antigo código EAN ou código de barras
+			textField($prod->uTrib) . // Unidade Tributável
+			numField($prod->qTrib) . // Quantidade Tributável - alterado para aceitar de 0 a 4 casas decimais e 11 inteiros
+			numField($prod->vUnTrib) . // Valor unitário de tributação - - alterado para aceitar 0 a 10 casas decimais e 11 inteiros
+			numField($prod->vFrete) . // Valor Total do Frete
+			numField($prod->vSeg) . // Valor Total do Seguro
+			numField($prod->vDesc) . // Valor do Desconto
+			numField($prod->vOutro) . // Outras despesas acessórias
+			numField($prod->indTot) . // Este campo deverá ser preenchido com: 0 – o valor do item (vProd) não compõe o valor total da NF-e (vProd) 1 – o valor do item (vProd) compõe o valor total da NF-e (vProd)
 
 			$icmsCols . // Colunas do ICMS mescladas 
 
